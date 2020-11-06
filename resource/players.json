@@ -1,0 +1,287 @@
+{
+  "player_01": {
+    "player_num": 1,
+    "name": {
+      "first_name": "Jack",
+      "last_name": "CP"
+    },
+    "player_type_enum": 1,
+    "player_type_desc": "Card player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_02": {
+    "player_num": 2,
+    "name": {
+      "first_name": "John",
+      "last_name": "BekerCDP"
+    },
+    "player_type_enum": 3,
+    "player_type_desc": "Card dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_03": {
+    "player_num": 3,
+    "name": {
+      "first_name": "Jim",
+      "last_name": "DP"
+    },
+    "player_type_enum": 2,
+    "player_type_desc": "Dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_04": {
+    "player_num": 4,
+    "name": {
+      "first_name": "Peter",
+      "last_name": "CDP"
+    },
+    "player_type_enum": 3,
+    "player_type_desc": "Card dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_05": {
+    "player_num": 5,
+    "name": {
+      "first_name": "Nik",
+      "last_name": "TFDP"
+    },
+    "player_type_enum": 4,
+    "player_type_desc": "Two 5 dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_06": {
+    "player_num": 6,
+    "name": {
+      "first_name": "Jane",
+      "last_name": "TSDP"
+    },
+    "player_type_enum": 5,
+    "player_type_desc": "Two 6 dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_07": {
+    "player_num": 7,
+    "name": {
+      "first_name": "George",
+      "last_name": "TSDP"
+    },
+    "player_type_enum": 5,
+    "player_type_desc": "Two 6 dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_08": {
+    "player_num": 8,
+    "name": {
+      "first_name": "Panos",
+      "last_name": "TFDP"
+    },
+    "player_type_enum": 4,
+    "player_type_desc": "Two 5 dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_09": {
+    "player_num": 9,
+    "name": {
+      "first_name": "Alan",
+      "last_name": "CD"
+    },
+    "player_type_enum": 1,
+    "player_type_desc": "Card player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_10": {
+    "player_num": 10,
+    "name": {
+      "first_name": "Ben",
+      "last_name": "CDP"
+    },
+    "player_type_enum": 3,
+    "player_type_desc": "Card dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_11": {
+    "player_num": 11,
+    "name": {
+      "first_name": "Yiannis",
+      "last_name": "TSDCP"
+    },
+    "player_type_enum": 7,
+    "player_type_desc": "Two 6 dice card player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_12": {
+    "player_num": 12,
+    "name": {
+      "first_name": "Alexis",
+      "last_name": "TFDCP"
+    },
+    "player_type_enum": 6,
+    "player_type_desc": "Two 5 dice card player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_13": {
+    "player_num": 13,
+    "name": {
+      "first_name": "Darth",
+      "last_name": "CP"
+    },
+    "player_type_enum": 1,
+    "player_type_desc": "Card player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_14": {
+    "player_num": 14,
+    "name": {
+      "first_name": "Nikos",
+      "last_name": "CDP"
+    },
+    "player_type_enum": 3,
+    "player_type_desc": "Card dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  },
+  "player_15": {
+    "player_num": 15,
+    "name": {
+      "first_name": "Maria",
+      "last_name": "TFDP"
+    },
+    "player_type_enum": 4,
+    "player_type_desc": "Two 5 dice player",
+    "score": {
+      "card_score": 0,
+      "dice_score": 0,
+      "aces": 0
+    },
+    "games": {
+      "card_games": 0,
+      "dice_games": 0,
+      "players_played" : []
+    }
+  }
+}
