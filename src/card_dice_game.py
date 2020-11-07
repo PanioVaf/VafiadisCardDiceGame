@@ -7,20 +7,18 @@
 # This is free software and you are welcome to redistribute it
 # under certain conditions.
 import itertools
-import random
-import operator
 import json
-import time
 import os
+import random
 import sys
 import numpy
+import time
 
 from collections import OrderedDict
-from numpy import random
-from enum import Enum
+from enum import Enum, IntEnum
 from itertools import product
 from random import shuffle
-from classes.player_types import PlayerTypes
+from numpy import random
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
@@ -35,16 +33,10 @@ DISPLAY_HEIGHT = 750
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255)
 WHITE = (255, 255, 255)
-LGREEN = (40, 120, 80)
+GREEN = (40, 120, 80)
 RED = (130, 10, 0)
-GREEN = (0, 255, 0)
-DGREEN = (0, 155, 0)
-selected_card_y_pos_player_1 = 330
-selected_card_y_pos_player_2 = 230
+LGREEN = (130, 200, 150)
 FONT_SIZE = 17
-delay_time_ms = 1000
-number_of_cards = 10
-turn_count = 1
 
 PATH = os.path.abspath((os.path.join(os.pardir)))
 
@@ -57,7 +49,7 @@ bg_logo = pygame.image.load(PATH + '/resource/ihu.png')
 screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 joker = pygame.image.load(PATH + "/resource/joker.jpg")
 joker = pygame.transform.scale(joker, (DISPLAY_WIDTH - 1400, DISPLAY_HEIGHT - 670))
-pygame.display.set_caption("Welcome to John's Card Dice Game, powered by Panagiotis Vafiadis")
+pygame.display.set_caption("Welcome to John's Card Dice Game, developed by Panagiotis Vafiadis")
 clock = pygame.time.Clock()
 
 player_pic = pygame.image.load(PATH + "/resource/player.png")
@@ -66,19 +58,24 @@ player_pic = pygame.transform.scale(player_pic, (110, 110))
 
 # Enum classes
 class Ranks(Enum):
+    """Decks Rank enum"""
     TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE = range(2, 15)
 
 
 class Suits(Enum):
+    """Decks Suits enum"""
     CLUBS, DIAMONDS, HEARTS, SPADES = range(1, 5)
+
+
+class PlayerTypes(IntEnum):
+    """Player types enum"""
+    CARD_PLAYER, DICE_PLAYER, CARD_DICE_PLAYER, TWO_5_DICE_PLAYER, \
+        TWO_6_DICE_PLAYER, TWO_5_DICE_CARD_PLAYER, TWO_6_DICE_CARD_PLAYER = range(1, 8)
 
 
 # main classes
 class Card(object):
-    """Card object represents a standard playing card.
-
-    The object attributes, suit and rank, are implemented as enums whose values determine the weight of the card
-    """
+    """Card class"""
 
     def __init__(self, suit, rank, in_deck=False, image=None):
         if rank in Ranks and suit in Suits:
@@ -89,34 +86,13 @@ class Card(object):
             self.suit = None
 
         self.in_deck = in_deck
-        self.image = image
-        self.position_x, self.position_y = 0, 0
-        self.horizontal_dimension = None
-        self.vertical_dimension = None
 
     def __str__(self):
         return str(self.rank.name) + " " + str(self.suit.name)
 
-    def __eq__(self, other):
-        return True if self.rank == other.rank and self.suit == other.suit else False
-
-    def __gt__(self, other):
-        """Tests suit precedence, if suits are equal then checks ranks precedence"""
-        if self.suit == other.suit:
-            if self.rank.value > other.rank.value:
-                return True
-        if self.suit.value > other.suit.value:
-            return True
-
-        return False
-
 
 class Deck(object):
-    """A deck is a collection of 52 Card objects
-
-    Object attributes: cards, removed
-    methods: draw(range = 1), deck_shuffle()
-    """
+    """Deck class"""
 
     def __init__(self):
         self.cards = [Card(suit, rank, in_deck=True) for suit, rank in product(Suits, Ranks)]
@@ -125,12 +101,9 @@ class Deck(object):
     def __str__(self):
         return str([str(card) for card in self.cards])
 
-    def draw(self, range_is=1):
+    def draw(self):
         """Draw card(s) by removing them from deck"""
-        drawn_cards = self.cards[:range_is]
-        for card in drawn_cards:
-            card.in_deck = False
-        del self.cards[:range_is]
+        drawn_cards = self.cards.pop()
         self.removed.append(drawn_cards)
         return drawn_cards
 
@@ -139,33 +112,59 @@ class Deck(object):
         shuffle(self.cards)
 
 
-class Player(object):
-    """Implementation of a player object
-
-    Object attributes: name, hand, score, turn, card_selected
-    methods: remove_from_hand(card)
-    """
-
-    def __init__(self, name, hand=None, score=0, turn_is=False):
+class Player:
+    def __init__(self, name,
+                 player_num,
+                 player_type_enum,
+                 player_type_desc,
+                 score,
+                 games):
         self.name = name
-        self.hand = hand
+        self.player_num = player_num
+        self.player_type_enum = player_type_enum
+        self.player_type_desc = player_type_desc
         self.score = score
-        self.turn = turn_is
-        self.selected_card = None
-
-    def __str__(self):
-        return str(self.name)
-
-    def remove_from_hand(self, card):
-        """Removes a card object from the players hand"""
-        if card and card in self.hand:
-            position = self.hand.index(card)
-            del self.hand[position]
-            return card
-        return None
+        self.games = games
 
 
-# Functions
+class Games:
+    def __init__(self, card_games, dice_games, players_played):
+        self.card_games = card_games
+        self.dice_games = dice_games
+        self.players_played = players_played
+
+
+class Score:
+    def __init__(self, card_score, dice_score, aces, cards):
+        self.card_score = card_score
+        self.dice_score = dice_score
+        self.aces = aces
+        self.cards = cards
+
+
+class Name:
+    def __init__(self, first_name, last_name):
+        self.first_name = first_name
+        self.last_name = last_name
+
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
+
+    @property
+    def name(self):
+        return f'{self.last_name}, {self.first_name}'
+
+
+# Functions for the layout of the game
+def screen_background(image, logo):
+    screen.fill(GREEN)
+    pygame.font.init()
+    screen.blit(image, (300, 0))
+    screen.blit(logo, (660, -50))
+
+
+# Functions for getting items from resources dir
 def get_dice_images():
     """Load dice images"""
     dices = {}
@@ -174,47 +173,34 @@ def get_dice_images():
     return dices
 
 
+def load_card(deck: Deck):
+    """Load card images"""
+    deck_images = {}
+    for card in deck.cards:
+        card_image = pygame.image.load(PATH + '/resource/cards/%s.jpg' % str(card))
+        card_image = pygame.transform.scale(card_image, (70, 110))
+        deck_images[str(card)] = card_image
+    return deck_images
+
+
+def get_players():
+    """"Load all players from file"""
+    try:
+        with open(PATH + '/resource/players.json', 'r') as players_file:
+            players_dict = json.load(players_file)
+            players_file.close()
+            return players_dict
+    except Exception as exc:
+        print("error" + str(exc))
+
+
+# Get Dice Images for later use
 dice_imag = get_dice_images()
 
 
-def show_hand(player):
-    """Displays all cards in hand of player on pygame display object"""
-    x, y, space_between_cards = 5, 462, 5
-    for card in player.hand:
-        card.position_x, card.position_y = x, y
-        screen.blit(card.image, (x, y))
-        x += card.horizontal_demension + space_between_cards
-
-
-def select_card(player, mouse_x, mouse_y):
-    """Player selects a card to play"""
-    if mouse_x:
-        for card in player.hand:
-            lower_x, upper_x = (card.position_x, card.position_x + card.horizontal_demension)
-            lower_y, upper_y = (card.position_y, card.position_y + card.vertical_demension)
-
-            if lower_x < mouse_x < upper_x:
-                if lower_y < mouse_y < upper_y:
-                    player.selected_card = card
-
-
-def load_card(card):
-    """Load card images"""
-    card.image = pygame.image.load(PATH + '/resource/cards/' + card + '.png')
-    width, height = card.image.get_size()
-    card.horizontal_dimension = width
-    card.vertical_dimension = height
-
-
-def play_selected_card(player):
-    """Display card that is selected on pygame display object"""
-    x = player.selected_card.position_x = 220
-    y = player.selected_card.position_y
-    screen.blit(player.selected_card.image, (x, y))
-
-
-def show_winner(players):
-    """Display text stating game winner at end of game"""
+# Functions for the games logic
+def show_dice_winner(players):
+    """Dice Game winner"""
     counter = 1
     lane_c = 15
     screen_background(bg_surf, bg_logo)
@@ -223,7 +209,6 @@ def show_winner(players):
     rank_players = OrderedDict(sorted(players.items(), key=lambda kv: kv[1]["score"]["dice_score"], reverse=True))
     for player, value in rank_players.items():
         score_val = value["score"]["dice_score"]
-        print(score_val)
         if score_val == 0:
             continue
 
@@ -235,7 +220,7 @@ def show_winner(players):
 
 
 def show_player_scores(players, game_of_dice=False):
-    """Left corner shows the player list"""
+    """Players Scores depending if dice or Card game"""
     lane_c = 0
     for player in players:
         player_names = my_font.render(" %s. %s is a %s" %
@@ -257,6 +242,7 @@ def show_player_scores(players, game_of_dice=False):
 
 
 def dice_roll(pl):
+    """Random roll depending the player type"""
     if pl["player_type_enum"] in [PlayerTypes.TWO_5_DICE_PLAYER.value,
                                   PlayerTypes.TWO_5_DICE_CARD_PLAYER.value]:
         roll = numpy.argmax(random.multinomial(n=1, pvals=[1 / 6, 1 / 6, 0, 1 / 6, 1 / 3, 1 / 6])) + 1
@@ -269,6 +255,7 @@ def dice_roll(pl):
 
 
 def dice_game(players, pl1, pl2):
+    """Dice Game"""
     pl1['games']['dice_games'] += 1
     pl2['games']['dice_games'] += 1
     for counter in range(1, DICE_ROLLS + 1):
@@ -304,10 +291,11 @@ def dice_game(players, pl1, pl2):
 def meet_by_two(players, cpl_list, pl1, pl2):
     """Players meet by two"""
     # Filtering for only meeting once
-    if pl1["player_num"] in pl2["games"]["players_played"] or pl2["player_num"] in pl1["games"]["players_played"]:
+    if pl1["player_num"] in pl2["games"]["dice_players_played"] or \
+            pl2["player_num"] in pl1["games"]["dice_players_played"]:
         return cpl_list
-    pl1["games"]["players_played"].append(pl2["player_num"])
-    pl2["games"]["players_played"].append(pl1["player_num"])
+    pl1["games"]["dice_players_played"].append(pl2["player_num"])
+    pl2["games"]["dice_players_played"].append(pl1["player_num"])
 
     if pl1["player_type_enum"] in CARD_PLAYERS:
         cpl_list.append(pl1["player_num"])
@@ -328,43 +316,95 @@ def meeting(players):
     return list(set(card_players))
 
 
-def get_players():
-    """"Load all players from file"""
-    try:
-        with open(PATH + '/resource/players.json', 'r') as players_file:
-            players_dict = json.load(players_file)
-            players_file.close()
-            return players_dict
-    except Exception as exc:
-        print("error" + str(exc))
+def show_all_cards(players, card_players, card_images):
+    """Show all cards function. implemented for debugging"""
+    screen3 = pygame.display.set_mode((DISPLAY_WIDTH - 500, DISPLAY_HEIGHT + 130))
+    screen3.fill(LGREEN)
+    screen3.blit(bg_logo, (DISPLAY_WIDTH - 930, -60))
+    player_pic2 = pygame.transform.scale(player_pic, (50, 50))
+    height_c = 0
+    for cpl in card_players:
+        width_c = 0
+        pl_name = my_font.render(players[str(cpl)]["name"]["first_name"] + " " +
+                                 players[str(cpl)]["name"]["last_name"], False, (40, 40, 40))
+        screen3.blit(player_pic2, (10, 20 + height_c))
+        screen3.blit(pl_name, (80, 50 + height_c))
+        for card in players[str(cpl)]["score"]["cards"]:
+            card_image = pygame.transform.scale(card_images[card], (50, 90))
+            screen3.blit(card_image, (210 + width_c, 20 + height_c))
+            width_c += 55
+        height_c += 95
 
 
-def screen_background(image, logo):
-    screen.fill(LGREEN)
-    pygame.font.init()
-    screen.blit(image, (300, 0))
-    screen.blit(logo, (660, -50))
+def show_card_winner(players, card_players, card_images):
+    """Show Winner"""
+    screen2 = pygame.display.set_mode((DISPLAY_WIDTH - 500, DISPLAY_HEIGHT - 300))
+    screen2.fill(LGREEN)
+    screen2.blit(bg_logo, (DISPLAY_WIDTH - 930, -60))
+    player_pic2 = pygame.transform.scale(player_pic, (50, 50))
+    height_c = 0
+    pl_aces = []
+    pl_counter = 0
+    for cpl in card_players:
+        if players[str(cpl)]["score"]["aces"] > 0:
+            pl_counter += 1
+            pl_aces.append([players[str(cpl)]["name"]["first_name"], players[str(cpl)]["score"]["aces"]])
+            width_c = 0
+            pl_name = my_font.render(players[str(cpl)]["name"]["first_name"] + " " +
+                                     players[str(cpl)]["name"]["last_name"], False, (40, 40, 40))
+            screen2.blit(player_pic2, (10, 20 + height_c))
+            screen2.blit(pl_name, (80, 50 + height_c))
+            for card in players[str(cpl)]["score"]["cards"]:
+                card_image = pygame.transform.scale(card_images[card], (50, 90))
+                screen2.blit(card_image, (210 + width_c, 20 + height_c))
+                width_c += 55
+            height_c += 95
+    pl_aces.sort(key=lambda x: x[1], reverse=True)
+    print(pl_aces)
+    win_draw = "Winner is : %s" % pl_aces[0][0] if pl_counter % 2 != 0 and len(pl_aces) < 4 else "No winner. Its a Draw"
+
+    win_name = my_font.render(win_draw, False, (40, 40, 40))
+    screen2.blit(win_name, (700, 250))
 
 
 def card_game(players, card_players):
+    """Card Game"""
     screen_background(bg_surf, bg_logo)
+    deck = Deck()
+    card_images = load_card(deck)
     if not card_players:
         no_pl_label = my_font.render("There are no Card Players... Restart the game", False, (40, 40, 40))
         screen.blit(no_pl_label, (700, 300))
     else:
-        deck = Deck()
+        for player in players:
+            players[player]["games"]["card_games"] += 1
         deck.deck_shuffle()
-        show_player_scores(players, False)
-        wid = DISPLAY_WIDTH / len(card_players)
-        hei = DISPLAY_HEIGHT / len(card_players)
-        for pl in card_players:
-            screen.blit(player_pic, (wid + pl * 10, hei))
+        while deck.cards:
+            for cpl in card_players:
+                width_c = 600
+                if deck.cards:
+                    screen_background(bg_surf, bg_logo)
+                    show_player_scores(players, False)
+                    pl_name = my_font.render(players[str(cpl)]["name"]["first_name"], False, (40, 40, 40))
+                    screen.blit(player_pic, (450, 350))
+                    screen.blit(pl_name, (450, 320))
+                    card_picked = str(deck.draw())
+                    players[str(cpl)]["score"]["cards"].append(card_picked)
+                    if "ACE" in card_picked:
+                        players[str(cpl)]["score"]["aces"] += 1
+                    for card in players[str(cpl)]["score"]["cards"]:
+                        screen.blit(card_images[card], (width_c, 350))
+                        width_c += 70
+                    pygame.display.flip()
+                    # time.sleep(0.1)
+    show_card_winner(players, card_players, card_images)
 
 
 def main():
     """ Main program function. """
-    # Get the Dict with the players
+    # Get the players dict
     card_player_list = []
+    space_hit_first = True
     players_list = get_players()
     pygame.display.flip()
     screen_background(bg_surf, bg_logo)
@@ -375,28 +415,32 @@ def main():
     game_running = True
     while game_running:
         for event in pygame.event.get():
+            mouse = pygame.mouse.get_pos()
             if event.type == pygame.QUIT:
-                game_running = False
                 quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_ESCAPE:
+                    game_running = False
+                if event.key == pygame.K_SPACE and space_hit_first:
+                    space_hit_first = False
                     screen_background(bg_surf, bg_logo)
                     show_player_scores(players_list)
                     card_player_list = meeting(players_list)
-                    show_winner(players_list)
-                    label = my_font.render("Press Joker to continue to CARDS game!", False, (40, 40, 40))
-                    screen.blit(label, (750, 400))
+                    show_dice_winner(players_list)
+                    label = my_font.render("Click on Joker to continue to CARDS game!", False, (40, 40, 40))
+                    screen.blit(label, (750, 300))
                     screen.blit(joker, (860, 500))
-            # if event.type == pygame.KEYDOWN:
-            #     card_game(players_list, card_player_list)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(mouse)
+                if 855 < mouse[0] < 965 and 480 < mouse[1] < 600:
+                    card_game(players_list, card_player_list)
 
         pygame.display.update()
         clock.tick(120)
 
     pygame.quit()
     sys.exit()
-
 
 if __name__ == "__main__":
     main()

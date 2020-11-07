@@ -1,5 +1,5 @@
 {
-  "player_01": {
+  "1" : {
     "player_num": 1,
     "name": {
       "first_name": "Jack",
@@ -10,15 +10,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_02": {
+  "2": {
     "player_num": 2,
     "name": {
       "first_name": "John",
@@ -29,15 +30,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_03": {
+  "3": {
     "player_num": 3,
     "name": {
       "first_name": "Jim",
@@ -48,15 +50,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_04": {
+  "4": {
     "player_num": 4,
     "name": {
       "first_name": "Peter",
@@ -67,15 +70,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_05": {
+  "5": {
     "player_num": 5,
     "name": {
       "first_name": "Nik",
@@ -86,15 +90,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_06": {
+  "6": {
     "player_num": 6,
     "name": {
       "first_name": "Jane",
@@ -105,15 +110,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_07": {
+  "7": {
     "player_num": 7,
     "name": {
       "first_name": "George",
@@ -124,15 +130,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_08": {
+  "8": {
     "player_num": 8,
     "name": {
       "first_name": "Panos",
@@ -143,15 +150,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_09": {
+  "9": {
     "player_num": 9,
     "name": {
       "first_name": "Alan",
@@ -162,15 +170,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_10": {
+  "10": {
     "player_num": 10,
     "name": {
       "first_name": "Ben",
@@ -181,15 +190,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_11": {
+  "11": {
     "player_num": 11,
     "name": {
       "first_name": "Yiannis",
@@ -200,34 +210,36 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_12": {
+  "12": {
     "player_num": 12,
     "name": {
       "first_name": "Alexis",
-      "last_name": "TFDCP"
+      "last_name": "CP"
     },
-    "player_type_enum": 6,
-    "player_type_desc": "Two 5 dice card player",
+    "player_type_enum": 1,
+    "player_type_desc": "Card player",
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_13": {
+  "13": {
     "player_num": 13,
     "name": {
       "first_name": "Darth",
@@ -238,15 +250,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_14": {
+  "14": {
     "player_num": 14,
     "name": {
       "first_name": "Nikos",
@@ -257,15 +270,16 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   },
-  "player_15": {
+  "15": {
     "player_num": 15,
     "name": {
       "first_name": "Maria",
@@ -276,12 +290,13 @@
     "score": {
       "card_score": 0,
       "dice_score": 0,
-      "aces": 0
+      "aces": 0,
+      "cards": []
     },
     "games": {
       "card_games": 0,
       "dice_games": 0,
-      "players_played" : []
+      "dice_players_played" : []
     }
   }
 }
