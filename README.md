@@ -47,4 +47,4 @@ The commands to run the **VafiadisCardDiceGame** is given below.
 ```
 $ source .env/bin/activate
 $python card_dice_game.py
-...
+```
