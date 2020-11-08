@@ -6,9 +6,9 @@
 # Advanced Programming and Rich Internet Applications
 # This is free software and you are welcome to redistribute it
 # under certain conditions.
+import os
 import itertools
 import json
-import os
 import random
 import sys
 import numpy
@@ -19,9 +19,9 @@ from enum import Enum, IntEnum
 from itertools import product
 from random import shuffle
 from numpy import random
-
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
+import pygame # declared after due to pygame convention
+
 
 # Final Objects Initialized
 DICE_ROLLS = 10
@@ -31,29 +31,26 @@ DISPLAY_WIDTH = 1500
 DISPLAY_HEIGHT = 750
 
 BLACK = (0, 0, 0)
-BLUE = (0, 0, 255)
-WHITE = (255, 255, 255)
 GREEN = (40, 120, 80)
 RED = (130, 10, 0)
 LGREEN = (130, 200, 150)
 FONT_SIZE = 17
 
-PATH = os.path.abspath((os.path.join(os.pardir)))
+PATH = os.path.abspath(os.path.join(os.pardir))
 
 # Initialize game, set the screen and background
 pygame.init()
+screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+pygame.display.set_caption("Welcome to John's Card Dice Game, developed by Panagiotis Vafiadis")
 my_font = pygame.font.SysFont('Times New Roman', FONT_SIZE, True)
 bg_surf = pygame.image.load(PATH + '/resource/table.jpg')
 bg_surf = pygame.transform.scale(bg_surf, (DISPLAY_WIDTH - 300, DISPLAY_HEIGHT))
 bg_logo = pygame.image.load(PATH + '/resource/ihu.png')
-screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
 joker = pygame.image.load(PATH + "/resource/joker.jpg")
 joker = pygame.transform.scale(joker, (DISPLAY_WIDTH - 1400, DISPLAY_HEIGHT - 670))
-pygame.display.set_caption("Welcome to John's Card Dice Game, developed by Panagiotis Vafiadis")
-clock = pygame.time.Clock()
-
 player_pic = pygame.image.load(PATH + "/resource/player.png")
 player_pic = pygame.transform.scale(player_pic, (110, 110))
+clock = pygame.time.Clock()
 
 
 # Enum classes
@@ -77,7 +74,7 @@ class PlayerTypes(IntEnum):
 class Card(object):
     """Card class"""
 
-    def __init__(self, suit, rank, in_deck=False, image=None):
+    def __init__(self, suit, rank, in_deck=False):
         if rank in Ranks and suit in Suits:
             self.rank = rank
             self.suit = suit
@@ -168,8 +165,8 @@ def screen_background(image, logo):
 def get_dice_images():
     """Load dice images"""
     dices = {}
-    for i in range(1, 7):
-        dices[i] = pygame.image.load(PATH + ("/resource/dice/%s.png" % str(i)))
+    for dice in range(1, 7):
+        dices[dice] = pygame.image.load(PATH + ("/resource/dice/%s.png" % str(dice)))
     return dices
 
 
@@ -245,6 +242,8 @@ def dice_roll(pl):
     """Random roll depending the player type"""
     if pl["player_type_enum"] in [PlayerTypes.TWO_5_DICE_PLAYER.value,
                                   PlayerTypes.TWO_5_DICE_CARD_PLAYER.value]:
+        # random.multinomial: It describes outcomes of multi-nomial scenarios
+        # numpy.argmax: Returns indices of the max element of the array in a particular axis
         roll = numpy.argmax(random.multinomial(n=1, pvals=[1 / 6, 1 / 6, 0, 1 / 6, 1 / 3, 1 / 6])) + 1
     elif pl["player_type_enum"] in [PlayerTypes.TWO_6_DICE_CARD_PLAYER.value,
                                     PlayerTypes.TWO_6_DICE_PLAYER.value]:
@@ -256,6 +255,7 @@ def dice_roll(pl):
 
 def dice_game(players, pl1, pl2):
     """Dice Game"""
+    # Increase game counter
     pl1['games']['dice_games'] += 1
     pl2['games']['dice_games'] += 1
     for counter in range(1, DICE_ROLLS + 1):
@@ -270,22 +270,20 @@ def dice_game(players, pl1, pl2):
         screen.blit(player_pic, (450, 380))
         screen.blit(player_pic, (1250, 380))
         screen.blit(round_label, (860, 250))
+        # Rolling Dice
         roll_pl1 = dice_roll(pl1)
         roll_pl2 = dice_roll(pl2)
 
         if roll_pl1 > roll_pl2:
-            for k, v in players.items():
-                if v["player_num"] == pl1["player_num"]:
-                    v["score"]["dice_score"] += roll_pl1
+            players[str(pl1['player_num'])]["score"]["dice_score"] += roll_pl1
         if roll_pl1 < roll_pl2:
-            for k, v in players.items():
-                if v["player_num"] == pl2["player_num"]:
-                    v["score"]["dice_score"] += roll_pl2
+            players[str(pl2['player_num'])]["score"]["dice_score"] += roll_pl2
+
         screen.blit(dice_imag[roll_pl1], (600, 400))
         screen.blit(dice_imag[roll_pl2], (1100, 400))
 
         pygame.display.flip()
-        # time.sleep(0.1)    # UNCOMMENT and manipulate the value for viewing the game
+        # time.sleep(0.01)    # UNCOMMENT and manipulate the value for viewing the rolls
 
 
 def meet_by_two(players, cpl_list, pl1, pl2):
@@ -360,7 +358,6 @@ def show_card_winner(players, card_players, card_images):
                 width_c += 55
             height_c += 95
     pl_aces.sort(key=lambda x: x[1], reverse=True)
-    print(pl_aces)
     win_draw = "Winner is : %s" % pl_aces[0][0] if pl_counter % 2 != 0 and len(pl_aces) < 4 else "No winner. Its a Draw"
 
     win_name = my_font.render(win_draw, False, (40, 40, 40))
@@ -396,23 +393,29 @@ def card_game(players, card_players):
                         screen.blit(card_images[card], (width_c, 350))
                         width_c += 70
                     pygame.display.flip()
-                    # time.sleep(0.1)
+                    time.sleep(0.1)
+    # ************************** UNCOMMENT TO SEE ALL CARDS **************************
+    # show_all_cards(players, card_players, card_images)
+    # pygame.display.flip()
+    # time.sleep(10)
+
+    # Showing the winner
     show_card_winner(players, card_players, card_images)
 
 
 def main():
     """ Main program function. """
-    # Get the players dict
     card_player_list = []
     space_hit_first = True
+    game_running = True
     players_list = get_players()
+
     pygame.display.flip()
     screen_background(bg_surf, bg_logo)
     label = my_font.render("Press SPACE to START the DICE game!", False, (40, 40, 40))
     screen.blit(label, (770, 300))
 
     # Game Loop
-    game_running = True
     while game_running:
         for event in pygame.event.get():
             mouse = pygame.mouse.get_pos()
@@ -432,7 +435,6 @@ def main():
                     screen.blit(label, (750, 300))
                     screen.blit(joker, (860, 500))
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print(mouse)
                 if 855 < mouse[0] < 965 and 480 < mouse[1] < 600:
                     card_game(players_list, card_player_list)
 
@@ -441,6 +443,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == "__main__":
     main()
