@@ -32,7 +32,7 @@ We are creating a virtual enviroment in order to install the dependencies locall
 
 
 ```
-$ cd atmsim/
+$ cd VafiadisCardDiceGame/
 $ virtualenv .env
 $ source .env/bin/activate
 $ pip install -r requirements.txt
@@ -42,9 +42,11 @@ $ pip install -r requirements.txt
 Open the project to IDE (PYCHARM was used for this one)
 Hit RUN
 
-The commands to run the **VafiadisCardDiceGame** is given below. 
+OR
+
+The commands to run the **VafiadisCardDiceGame** from terminal is given below. 
 
 ```
 $ source .env/bin/activate
-$python card_dice_game.py
+$ python card_dice_game.py
 ```
