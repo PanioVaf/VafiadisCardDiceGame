@@ -22,8 +22,9 @@ $ sudo easy_install pip
 $ sudo easy_install virtualenv
 
 or if you get an error
+$ python3 -m pip install --upgrade pip
+$ pip3 install virtualenv
 
-sudo -H pip install virtualenv
 ```
 
 We clone the repository :
@@ -37,7 +38,8 @@ We are creating a virtual enviroment in order to install the dependencies locall
 
 ```
 $ cd VafiadisCardDiceGame/
-$ virtualenv .env
+$ which python3
+$ virtualenv -p /home/example_username/opt/python-3.6.2/bin/python3  .env
 $ source .env/bin/activate
 $ pip install -r requirements.txt
 ```
