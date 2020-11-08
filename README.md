@@ -14,12 +14,16 @@ for Card game: All available (card) players participate in a hand of cards. In t
 
 ## Install dependencies
 
-If you are on a Mac or Linux machine, you probably already have Python installed. In this project 
-we use Python 3.6.
+If you are on a Mac or Linux machine, you probably already have Python installed. In this project we use Python 3.6.
 We need to make sure though that we install pip and virtualenv for the correct version of Python on your computer. Open a terminal and run the following command:
 
 ```
+$ sudo easy_install pip
 $ sudo easy_install virtualenv
+
+or if you get an error
+
+sudo -H pip install virtualenv
 ```
 
 We clone the repository :
@@ -48,5 +52,6 @@ The commands to run the **VafiadisCardDiceGame** from terminal is given below.
 
 ```
 $ source .env/bin/activate
+$ cd src     
 $ python card_dice_game.py
 ```
