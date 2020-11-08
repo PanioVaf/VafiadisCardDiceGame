@@ -58,6 +58,9 @@ class Ranks(Enum):
     """Decks Rank enum"""
     TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE = range(2, 15)
 
+    def __str__(self):
+        return str(self.value)
+
 
 class Suits(Enum):
     """Decks Suits enum"""
@@ -386,6 +389,7 @@ def card_game(players, card_players):
                     screen.blit(player_pic, (450, 350))
                     screen.blit(pl_name, (450, 320))
                     card_picked = str(deck.draw())
+                    players[str(cpl)]["score"]["card_score"] += int(str(Ranks[card_picked.split()[0]]))
                     players[str(cpl)]["score"]["cards"].append(card_picked)
                     if "ACE" in card_picked:
                         players[str(cpl)]["score"]["aces"] += 1
