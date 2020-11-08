@@ -20,36 +20,35 @@ from itertools import product
 from random import shuffle
 from numpy import random
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame # declared after due to pygame convention
+import pygame  # declared after, due to pygame convention
 
 
 # Final Objects Initialized
 DICE_ROLLS = 10
 CARD_PLAYERS = [1, 3, 6, 7]
 DICE_PLAYERS = [2, 3, 4, 5, 6, 7]
-DISPLAY_WIDTH = 1500
-DISPLAY_HEIGHT = 750
 
 BLACK = (0, 0, 0)
 GREEN = (40, 120, 80)
 RED = (130, 10, 0)
 LGREEN = (130, 200, 150)
-FONT_SIZE = 17
+FONT_SIZE = 15
 
 PATH = os.path.abspath(os.path.join(os.pardir))
 
 # Initialize game, set the screen and background
 pygame.init()
-screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+screen = pygame.display.set_mode((1200, 600))
 pygame.display.set_caption("Welcome to John's Card Dice Game, developed by Panagiotis Vafiadis")
 my_font = pygame.font.SysFont('Times New Roman', FONT_SIZE, True)
 bg_surf = pygame.image.load(PATH + '/resource/table.jpg')
-bg_surf = pygame.transform.scale(bg_surf, (DISPLAY_WIDTH - 300, DISPLAY_HEIGHT))
+bg_surf = pygame.transform.scale(bg_surf, (900, 600))
 bg_logo = pygame.image.load(PATH + '/resource/ihu.png')
+bg_logo = pygame.transform.scale(bg_logo, (380, 240))
 joker = pygame.image.load(PATH + "/resource/joker.jpg")
-joker = pygame.transform.scale(joker, (DISPLAY_WIDTH - 1400, DISPLAY_HEIGHT - 670))
+joker = pygame.transform.scale(joker, (95, 80))
 player_pic = pygame.image.load(PATH + "/resource/player.png")
-player_pic = pygame.transform.scale(player_pic, (110, 110))
+player_pic = pygame.transform.scale(player_pic, (80, 80))
 clock = pygame.time.Clock()
 
 
@@ -161,7 +160,7 @@ def screen_background(image, logo):
     screen.fill(GREEN)
     pygame.font.init()
     screen.blit(image, (300, 0))
-    screen.blit(logo, (660, -50))
+    screen.blit(logo, (570, -50))
 
 
 # Functions for getting items from resources dir
@@ -169,7 +168,8 @@ def get_dice_images():
     """Load dice images"""
     dices = {}
     for dice in range(1, 7):
-        dices[dice] = pygame.image.load(PATH + ("/resource/dice/%s.png" % str(dice)))
+        dice_image = pygame.image.load(PATH + ("/resource/dice/%s.png" % str(dice)))
+        dices[dice] = pygame.transform.scale(dice_image, (80, 82))
     return dices
 
 
@@ -178,8 +178,7 @@ def load_card(deck: Deck):
     deck_images = {}
     for card in deck.cards:
         card_image = pygame.image.load(PATH + '/resource/cards/%s.jpg' % str(card))
-        card_image = pygame.transform.scale(card_image, (70, 110))
-        deck_images[str(card)] = card_image
+        deck_images[str(card)] = pygame.transform.scale(card_image, (70, 110))
     return deck_images
 
 
@@ -205,7 +204,7 @@ def show_dice_winner(players):
     lane_c = 15
     screen_background(bg_surf, bg_logo)
     score_label = my_font.render("P SCORE    NAME", False, BLACK)
-    screen.blit(score_label, (0, 0))
+    screen.blit(score_label, (2, 0))
     rank_players = OrderedDict(sorted(players.items(), key=lambda kv: kv[1]["score"]["dice_score"], reverse=True))
     for player, value in rank_players.items():
         score_val = value["score"]["dice_score"]
@@ -214,7 +213,7 @@ def show_dice_winner(players):
 
         full_name = value["name"]["first_name"] + " " + value["name"]["last_name"]
         player_score = my_font.render("%s.   %s       %s" % (str(counter), str(score_val), full_name), False, BLACK)
-        screen.blit(player_score, (0, lane_c))
+        screen.blit(player_score, (2, lane_c))
         lane_c += 20
         counter += 1
 
@@ -228,17 +227,17 @@ def show_player_scores(players, game_of_dice=False):
                                        players[player]["name"]["first_name"],
                                        players[player]["player_type_desc"]), False, (0, 0, 0))
         if not game_of_dice:
-            player_score = my_font.render(" Card: %s   Dice %s   Ace" % (" " * 8, " " * 8), False, (0, 0, 0))
-            player_score_col = my_font.render("%s%s%s%s%s%s" % (" " * 8, players[player]["score"]["card_score"],
-                                                                " " * 20, players[player]["score"]["dice_score"],
-                                                                " " * 20, players[player]["score"]["aces"]), False, RED)
+            player_score = my_font.render(" Card:%sDice:%s  Ace:" % (" " * 8, " " * 10), False, (0, 0, 0))
+            player_score_col = my_font.render("%s%s%s%s%s%s" % (" " * 9, players[player]["score"]["card_score"],
+                                                                " " * 14, players[player]["score"]["dice_score"],
+                                                                " " * 14, players[player]["score"]["aces"]), False, RED)
         else:
             player_score = my_font.render("Dice score: ", False, (0, 0, 0))
             player_score_col = my_font.render("%s%s" % (" " * 20, players[player]["score"]["dice_score"]), False, RED)
-        screen.blit(player_names, (0, lane_c))
-        screen.blit(player_score, (30, lane_c + FONT_SIZE + 5))
-        screen.blit(player_score_col, (50, lane_c + FONT_SIZE + 5))
-        lane_c += (FONT_SIZE * 2.8)
+        screen.blit(player_names, (2, lane_c))
+        screen.blit(player_score, (32, lane_c + FONT_SIZE + 3))
+        screen.blit(player_score_col, (52, lane_c + FONT_SIZE + 3))
+        lane_c += (FONT_SIZE * 2.4)
 
 
 def dice_roll(pl):
@@ -269,10 +268,11 @@ def dice_game(players, pl1, pl2):
                                                           str(pl2['player_num']),
                                                           pl2['name']['first_name']), False, (40, 40, 40))
         round_label = my_font.render("Round %s" % str(counter), False, (40, 40, 40))
-        screen.blit(pl_label, (800, 200))
+        screen.blit(pl_label, (655, 200))
+        screen.blit(round_label, (730, 250))
         screen.blit(player_pic, (450, 380))
-        screen.blit(player_pic, (1250, 380))
-        screen.blit(round_label, (860, 250))
+        screen.blit(player_pic, (970, 380))
+
         # Rolling Dice
         roll_pl1 = dice_roll(pl1)
         roll_pl2 = dice_roll(pl2)
@@ -282,8 +282,8 @@ def dice_game(players, pl1, pl2):
         if roll_pl1 < roll_pl2:
             players[str(pl2['player_num'])]["score"]["dice_score"] += roll_pl2
 
-        screen.blit(dice_imag[roll_pl1], (600, 400))
-        screen.blit(dice_imag[roll_pl2], (1100, 400))
+        screen.blit(dice_imag[roll_pl1], (580, 400))
+        screen.blit(dice_imag[roll_pl2], (850, 400))
 
         pygame.display.flip()
         # time.sleep(0.01)    # UNCOMMENT and manipulate the value for viewing the rolls
@@ -319,9 +319,9 @@ def meeting(players):
 
 def show_all_cards(players, card_players, card_images):
     """Show all cards function. implemented for debugging"""
-    screen3 = pygame.display.set_mode((DISPLAY_WIDTH - 500, DISPLAY_HEIGHT + 130))
+    screen3 = pygame.display.set_mode((1000, 880))
     screen3.fill(LGREEN)
-    screen3.blit(bg_logo, (DISPLAY_WIDTH - 930, -60))
+    screen3.blit(bg_logo, (570, -60))
     player_pic2 = pygame.transform.scale(player_pic, (50, 50))
     height_c = 0
     for cpl in card_players:
@@ -339,9 +339,9 @@ def show_all_cards(players, card_players, card_images):
 
 def show_card_winner(players, card_players, card_images):
     """Show Winner"""
-    screen2 = pygame.display.set_mode((DISPLAY_WIDTH - 500, DISPLAY_HEIGHT - 300))
+    screen2 = pygame.display.set_mode((1000, 450))
     screen2.fill(LGREEN)
-    screen2.blit(bg_logo, (DISPLAY_WIDTH - 930, -60))
+    screen2.blit(bg_logo, (570, -60))
     player_pic2 = pygame.transform.scale(player_pic, (50, 50))
     height_c = 0
     pl_aces = []
@@ -374,7 +374,7 @@ def card_game(players, card_players):
     card_images = load_card(deck)
     if not card_players:
         no_pl_label = my_font.render("There are no Card Players... Restart the game", False, (40, 40, 40))
-        screen.blit(no_pl_label, (700, 300))
+        screen.blit(no_pl_label, (620, 300))
     else:
         for player in players:
             players[player]["games"]["card_games"] += 1
@@ -417,7 +417,7 @@ def main():
     pygame.display.flip()
     screen_background(bg_surf, bg_logo)
     label = my_font.render("Press SPACE to START the DICE game!", False, (40, 40, 40))
-    screen.blit(label, (770, 300))
+    screen.blit(label, (620, 300))
 
     # Game Loop
     while game_running:
@@ -436,10 +436,11 @@ def main():
                     card_player_list = meeting(players_list)
                     show_dice_winner(players_list)
                     label = my_font.render("Click on Joker to continue to CARDS game!", False, (40, 40, 40))
-                    screen.blit(label, (750, 300))
-                    screen.blit(joker, (860, 500))
+                    screen.blit(label, (620, 300))
+                    screen.blit(joker, (730, 400))
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if 855 < mouse[0] < 965 and 480 < mouse[1] < 600:
+                print(mouse)
+                if 730 < mouse[0] < 829 and 400 < mouse[1] < 480:
                     card_game(players_list, card_player_list)
 
         pygame.display.update()
