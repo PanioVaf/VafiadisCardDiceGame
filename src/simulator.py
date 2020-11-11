@@ -76,10 +76,10 @@ class Simulator:
 
     def dice_game(self, dice_players):
         """Dice Game"""
-
+        game_counter = 1
         for pl1, pl2 in itertools.combinations(dice_players, 2):
             match = DiceMatch(pl1, pl2)
-
+            print()
             while match.playing():
                 self.render_background()
 
@@ -99,10 +99,9 @@ class Simulator:
                 self.screen.blit(self.dice_imag[match.dice1], (580, 400))
                 self.screen.blit(self.dice_imag[match.dice2], (850, 400))
 
-                print("playing dice '" + pl1.full_name + "' with '" + pl2.full_name +
-                      "' Dice1: " + str(match.dice1) + " Dice2: " + str(match.dice2) +
-                      " Score1: " + str(pl1.stats.dice_score) + " Score2: " + str(pl2.stats.dice_score))
-
+                print("Game %s Round %s playing dice" % (game_counter, round_counter))
+                print("%s vs %s | Dice1: %s Dice2: %s | Score1 : %s Score2: %s" % (
+                    pl1.full_name, pl2.full_name, match.dice1, match.dice2, pl1.stats.dice_score, pl2.stats.dice_score))
                 self.show_dice_winner(dice_players)
                 pygame.display.flip()
                 time.sleep(0.018)
@@ -112,9 +111,9 @@ class Simulator:
 
         lane_c = 0
         for player in players:
-            names = " %s. %s is a %s" % (player.player_id,
-                                         player.first_name,
-                                         player.player_type_desc)
+            names = " (%s) %s is a %s" % (player.player_id,
+                                          player.first_name,
+                                          player.player_type_desc)
 
             player_names = self.my_font.render(names, False, (0, 0, 0))
 
@@ -134,8 +133,8 @@ class Simulator:
         """Dice Game winner"""
 
         counter = 1
-        lane_c = 15
-        self.render_text("P SCORE    NAME", (2, 0), self.BLACK)
+        lane_c = 17
+        self.render_text("P   SCORE    NAME", (2, 2), self.BLACK)
 
         rank_players = sorted(players, key=lambda x: x.stats.dice_score, reverse=True)
 
@@ -145,7 +144,8 @@ class Simulator:
                 continue
 
             full_name = player.full_name
-            self.render_text("%s.   %s       %s" % (str(counter), str(score), full_name), (2, lane_c), self.BLACK)
+            gap = 7 if counter > 9 else 9
+            self.render_text("%s.%s%s%s%s" % (str(counter), " " * gap, str(score), " " * 7, full_name), (2, lane_c), self.BLACK)
             lane_c += 20
             counter += 1
 
@@ -153,7 +153,7 @@ class Simulator:
         """Show Card Winner"""
 
         self.screen.fill(self.LGREEN)
-        self.render_image(self.bg_logo, (570, -60))
+        self.render_image(self.bg_logo, (800, -60))
 
         player_pic2 = pygame.transform.scale(self.player_pic, (50, 50))
         height_c = 0
@@ -171,7 +171,7 @@ class Simulator:
 
         winner = card_match.get_winner()
         win_draw = "Winner is: %s" % winner.full_name if winner else "No winner. It's a draw."
-        self.render_text(win_draw, (700, 250))
+        self.render_text(win_draw, (900, 250))
 
     def render_text(self, message, pos, color=(40, 40, 40)):
         no_pl_label = self.my_font.render(message, False, color)
@@ -194,7 +194,7 @@ class Simulator:
         else:
             while card_match.deck.has_cards():
                 for p in card_match.card_players:
-                    width_c = 600
+                    width_c = 500
                     if card_match.playing(p):
                         self.render_background()
                         self.show_player_scores(card_match.card_players)
@@ -203,7 +203,7 @@ class Simulator:
                         pos = 1
                         for card in p.stats.cards:
                             self.render_image(self.card_images[str(card)], (width_c + 70 * pos, 350))
-                            pos = (pos + 1) % 6
+                            pos += 1
 
                         pygame.display.flip()
                         time.sleep(0.1)
@@ -218,30 +218,28 @@ class Simulator:
 
         print("All players:")
         for pl in all_players:
-            print(pl.full_name + " " + pl.player_type_desc)
-        print()
-        print("Dice players:")
+            print("  " + pl.full_name + " " + pl.player_type_desc)
+        print("\nDice players:")
         for pl in dice_players:
-            print(pl.full_name + " " + pl.player_type_desc)
-        print()
-        print("Card players:")
+            print("  " + pl.full_name + " " + pl.player_type_desc)
+        print("\nCard players:")
         for pl in card_players:
-            print(pl.full_name + " " + pl.player_type_desc)
+            print("  " + pl.full_name + " " + pl.player_type_desc)
         print()
 
         while game_running:
             self.render_background()
 
             if self.mode == WindowGameMode.STARTUP_SCREEN:
-                self.render_text("Press SPACE to START the DICE game or click!", (620, 300))
+                self.render_text("Press SPACE to START the DICE game or click!", (615, 300))
                 pygame.display.flip()
             elif self.mode == WindowGameMode.DICE_GAME_SCREEN:
                 self.dice_game(dice_players)
                 self.mode = WindowGameMode.JOKER_SCREEN
             elif self.mode == WindowGameMode.JOKER_SCREEN:
                 self.show_dice_winner(dice_players)
-                self.render_text("Click on Joker to continue to CARDS game!", (620, 300))
-                self.render_image(self.joker, (730, 400))
+                self.render_text("Click on Joker to continue to CARDS game!", (615, 300))
+                self.render_image(self.joker, (715, 400))
                 pygame.display.flip()
             elif self.mode == WindowGameMode.CARD_GAME_SCREEN:
                 self.card_game(card_match)
