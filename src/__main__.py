@@ -19,6 +19,7 @@ from src.simulator import Simulator
 def main():
     """ Main program function. """
     resources_path = Path(os.path.dirname(os.path.abspath(__file__))).parent / 'resource'
+    print(resources_path)
     all_players = load_players(resources_path / 'players.json')
     simulator = Simulator(resources_path)
     simulator.run(all_players)

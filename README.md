@@ -39,21 +39,27 @@ We are creating a virtual enviroment in order to install the dependencies locall
 ```
 $ cd VafiadisCardDiceGame/
 $ which python3
-$ virtualenv -p /home/example_username/opt/python-3.6.2/bin/python3  .env
+$ virtualenv -p $(which python3)  .env
 $ source .env/bin/activate
 $ pip install -r requirements.txt
 ```
 
 ## How to Run
 Open the project to IDE (PYCHARM was used for this one)
-Hit RUN
+Right click on \_\_main__.py and hit Run \_\_main__ 
 
 OR
 
 The commands to run the **VafiadisCardDiceGame** from terminal is given below. 
 
 ```
+$ cd VafiadisCardDiceGame/
 $ source .env/bin/activate
-$ cd src     
-$ python card_dice_game.py
+$ ./run.sh     
+```
+
+## How to Run unit tests
+
+```
+python3 -m unittest
 ```
