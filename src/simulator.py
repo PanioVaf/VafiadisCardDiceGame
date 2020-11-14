@@ -259,7 +259,7 @@ class Simulator:
                 elif self.mode == WindowGameMode.JOKER_SCREEN:
                     mouse = pygame.mouse.get_pos()
                     if event.type == pygame.MOUSEBUTTONDOWN:
-                        if 730 < mouse[0] < 829 and 400 < mouse[1] < 480:
+                        if 715 < mouse[0] < 810 and 400 < mouse[1] < 480:
                             self.mode = WindowGameMode.CARD_GAME_SCREEN
 
             pygame.display.update()
